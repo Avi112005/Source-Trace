@@ -1,1 +1,22 @@
--r backend/requirements.txt
+fastapi[standard]
+uvicorn
+python-multipart
+pydantic
+pydantic-settings
+python-dotenv
+asyncpg
+psycopg2-binary
+PyJWT
+passlib
+bcrypt
+groq
+onnxruntime
+chromadb
+pymupdf
+slowapi
+cryptography
+pdfplumber
+pdf2image
+pytesseract
+httpx
+pytest
