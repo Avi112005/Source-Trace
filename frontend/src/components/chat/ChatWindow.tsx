@@ -7,7 +7,21 @@ import { cn } from "@/lib/utils";
 import { useSessionId } from "@/hooks/useSessionId";
 
 // Mock data for initial frontend development
-const MOCK_MESSAGES = [
+interface Citation {
+  id: string;
+  documentName: string;
+  pageNumber: number;
+  imageUrl: string;
+}
+
+interface Message {
+  id: string;
+  role: string;
+  content: string;
+  citations: Citation[];
+}
+
+const MOCK_MESSAGES: Message[] = [
   {
     id: "1",
     role: "assistant",
@@ -18,7 +32,7 @@ const MOCK_MESSAGES = [
 
 export function ChatWindow() {
   const sessionId = useSessionId();
-  const [messages, setMessages] = useState(MOCK_MESSAGES);
+  const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [selectedCitation, setSelectedCitation] = useState<{url: string, title: string, page: number} | null>(null);
