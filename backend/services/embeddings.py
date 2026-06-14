@@ -3,10 +3,15 @@ import chromadb.utils.embedding_functions as embedding_functions
 import os
 
 # Initialize Local ChromaDB
-CHROMA_DIR = "chroma_db"
+DATA_DIR = os.environ.get("DATA_DIR", ".")
+CHROMA_DIR = os.path.join(DATA_DIR, "chroma_db")
 os.makedirs(CHROMA_DIR, exist_ok=True)
 chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
 collection = chroma_client.get_or_create_collection(name="documents")
+
+# Force HuggingFace to download the ONNX model to our persistent disk
+os.environ["HF_HOME"] = os.path.join(DATA_DIR, "huggingface")
+os.makedirs(os.environ["HF_HOME"], exist_ok=True)
 
 # Load ONNX embedding model (highly memory efficient)
 try:

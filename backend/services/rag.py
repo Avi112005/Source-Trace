@@ -10,7 +10,7 @@ collection = chroma_client.get_or_create_collection(name="documents")
 
 def query_documents(query: str, user_id: str, n_results: int = 3):
     if not model:
-        return []
+        return {}
         
     query_embedding = model([query])[0]
     
