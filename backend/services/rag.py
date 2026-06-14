@@ -12,7 +12,7 @@ def query_documents(query: str, user_id: str, n_results: int = 3):
     if not model:
         return []
         
-    query_embedding = model.encode(query).tolist()
+    query_embedding = model([query])[0]
     
     results = collection.query(
         query_embeddings=[query_embedding],

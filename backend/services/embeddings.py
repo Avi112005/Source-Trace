@@ -1,5 +1,5 @@
 import chromadb
-from sentence_transformers import SentenceTransformer
+import chromadb.utils.embedding_functions as embedding_functions
 import os
 
 # Initialize Local ChromaDB
@@ -8,11 +8,11 @@ os.makedirs(CHROMA_DIR, exist_ok=True)
 chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
 collection = chroma_client.get_or_create_collection(name="documents")
 
-# Load embedding model (downloads on first run)
+# Load ONNX embedding model (highly memory efficient)
 try:
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    model = embedding_functions.DefaultEmbeddingFunction()
 except Exception as e:
-    print(f"Warning: Could not load sentence transformer: {e}")
+    print(f"Warning: Could not load ONNX embedding function: {e}")
     model = None
 
 def store_document_embeddings(file_id: str, filename: str, pages_data: list, user_id: str = "00000000-0000-0000-0000-000000000000"):
@@ -31,7 +31,8 @@ def store_document_embeddings(file_id: str, filename: str, pages_data: list, use
             
             for i, chunk in enumerate(chunks):
                 chunk_id = f"{file_id}_p{page['page_number']}_c{i}"
-                embedding = model.encode(chunk).tolist()
+                # ChromaDB DefaultEmbeddingFunction takes a list of strings and returns a list of embeddings
+                embedding = model([chunk])[0]
                 
                 collection.add(
                     ids=[chunk_id],

@@ -10,7 +10,7 @@ PyJWT
 passlib
 bcrypt
 groq
-sentence-transformers
+onnxruntime
 chromadb
 pymupdf
 slowapi
