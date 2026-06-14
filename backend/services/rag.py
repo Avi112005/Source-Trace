@@ -80,9 +80,9 @@ def generate_rag_response(messages: list, user_id: str = "00000000-0000-0000-000
         for source in all_sources:
             doc_name = source.get("filename", source.get("file_id", "Unknown")[:8])
             page_num = source.get("page", 1)
-            # The AI might cite "[Document Name, Page X]"
-            # To be robust, if doc_name is in text, let's include the citation if that specific page was retrieved
-            if doc_name in answer_text:
+            
+            # Stricter citation matching: Ensure both the doc name AND the specific Page number are in the AI's answer
+            if doc_name in answer_text and (f"Page {page_num}" in answer_text or f"page {page_num}" in answer_text):
                 unique_cite_key = f"{doc_name}_page_{page_num}"
                 if unique_cite_key not in seen_files:
                     cited_sources.append(source)
