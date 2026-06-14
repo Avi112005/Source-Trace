@@ -15,6 +15,9 @@ DATA_DIR = os.environ.get("DATA_DIR", ".")
 IMAGES_DIR = os.path.join(DATA_DIR, "uploads", "page_images")
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
+# Render automatically injects this. Fallback to localhost for local development.
+BASE_URL = os.environ.get("RENDER_EXTERNAL_URL", "http://127.0.0.1:8000")
+
 def extract_text_from_pdf(file_path: str, file_id: str) -> dict:
     pages_data = []
     
@@ -51,7 +54,7 @@ def extract_text_from_pdf(file_path: str, file_id: str) -> dict:
                 pages_data.append({
                     "page_number": 1,
                     "text": scrub_pii(text if text else "No readable text found."),
-                    "image_url": f"http://127.0.0.1:8000/api/v1/documents/image/{file_id}_page_1.png"
+                    "image_url": f"{BASE_URL}/api/v1/documents/image/{file_id}_page_1.png"
                 })
                 return {"status": "success", "pages": pages_data}
             except Exception as e:
@@ -95,7 +98,7 @@ def extract_text_from_pdf(file_path: str, file_id: str) -> dict:
                     pages_data.append({
                         "page_number": i + 1,
                         "text": scrub_pii(text.strip()),
-                        "image_url": f"http://127.0.0.1:8000/api/v1/documents/image/{file_id}_page_{i + 1}.png"
+                        "image_url": f"{BASE_URL}/api/v1/documents/image/{file_id}_page_{i + 1}.png"
                     })
         finally:
             os.remove(tmp_path)
