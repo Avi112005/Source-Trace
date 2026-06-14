@@ -26,7 +26,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 os.makedirs(os.path.join(DATA_DIR, "uploads", "page_images"), exist_ok=True)
 
 # Allow Next.js frontend to communicate with this backend
-frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000").rstrip("/")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[frontend_url], 
