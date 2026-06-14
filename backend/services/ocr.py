@@ -70,7 +70,7 @@ def extract_text_from_pdf(file_path: str, file_id: str) -> dict:
             pdf_document = fitz.open(tmp_path)
             for page_num in range(len(pdf_document)):
                 page = pdf_document.load_page(page_num)
-                pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
+                pix = page.get_pixmap(matrix=fitz.Matrix(1, 1))
                 img_path = os.path.join(IMAGES_DIR, f"{file_id}_page_{page_num + 1}.png")
                 # Save plain temporarily, then read, encrypt, and rewrite
                 pix.save(img_path)
