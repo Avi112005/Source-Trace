@@ -15,8 +15,13 @@ DATA_DIR = os.environ.get("DATA_DIR", ".")
 IMAGES_DIR = os.path.join(DATA_DIR, "uploads", "page_images")
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
-# Render automatically injects this. Fallback to localhost for local development.
-BASE_URL = os.environ.get("RENDER_EXTERNAL_URL", "http://127.0.0.1:8000")
+# Cloud platform auto-detection for image URLs. Fallback to localhost.
+if "RENDER_EXTERNAL_URL" in os.environ:
+    BASE_URL = os.environ["RENDER_EXTERNAL_URL"]
+elif "RAILWAY_PUBLIC_DOMAIN" in os.environ:
+    BASE_URL = f"https://{os.environ['RAILWAY_PUBLIC_DOMAIN']}"
+else:
+    BASE_URL = "http://127.0.0.1:8000"
 
 def extract_text_from_pdf(file_path: str, file_id: str) -> dict:
     pages_data = []
