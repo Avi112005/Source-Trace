@@ -35,10 +35,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi.responses import HTMLResponse
+
+@app.api_route("/", methods=["GET", "HEAD"])
+async def root():
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Source Trace API</title>
+        <meta http-equiv="refresh" content="0; url={frontend_url}" />
+      </head>
+      <body style="font-family: sans-serif; padding: 2rem;">
+        <h2>API is Online! ✅</h2>
+        <p>If you are not redirected automatically, <a href="{frontend_url}">click here to go to the frontend</a>.</p>
+      </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content, status_code=200)
+
 app.include_router(documents.router)
 app.include_router(chat.router)
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
     return {
         "status": "ok", 
